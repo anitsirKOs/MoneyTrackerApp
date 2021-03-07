@@ -1,0 +1,10 @@
+{% extends 'tracker/base.html' %}
+
+{% block title %}Add information{% endblock %}
+
+{% block content %}
+    <a class="nav-link active" href="{% url 'add_income' %}">Add income</a>
+    <br>
+    <a class="nav-link active" href="{% url 'add_expenses' %}">Add expenses</a>
+
+{% endblock %}

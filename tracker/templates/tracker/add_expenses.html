@@ -1,0 +1,13 @@
+{% extends 'tracker/base.html' %}
+
+{% block title %}Add expenses{% endblock %}
+
+{% block content %}
+    <h3>Expenses</h3>
+    <form method="POST">
+        {% csrf_token %}
+        {{ expense_form.amount }}<br><br>
+        {{ expense_form.expenses_type }}<br><br>
+        <button type="submit" class="btn btn-outline-danger">Add expense</button>
+    </form>
+{% endblock %}

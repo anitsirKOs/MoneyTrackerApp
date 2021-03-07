@@ -1,0 +1,25 @@
+{% extends 'tracker/base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    {% if all_tracking_data %}
+
+        <h3>Balance</h3>
+        <h1>{{ all_tracking_data.balance }}</h1>
+
+        <h3>Income</h3>
+        <p>+{{ all_tracking_data.income }}</p>
+
+        <h3>Expenses</h3>
+        <p>-{{ all_tracking_data.expenses }}</p>
+
+
+    {% else %}
+        <p>Start your Money Tracker right now! Add information below!</p><br>
+        <a class="nav-link active" href="{% url 'add_income' %}">Add income</a>
+        <br>
+        <a class="nav-link active" href="{% url 'add_expenses' %}">Add expenses</a>
+    {% endif %}
+
+{% endblock %}
