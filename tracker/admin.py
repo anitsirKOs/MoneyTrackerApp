@@ -4,5 +4,5 @@ from . import models
 
 @admin.register(models.Tracker)
 class TrackerAdmin(admin.ModelAdmin):
-    list_display = ('user', 'expenses', 'expenses_type',
-                    'income', 'income_type', 'balance')
+    list_display = ('user', 'amount_expenses', 'expenses_type', 'amount',
+                    'income_type', 'balance', 'date', 'timestamp')

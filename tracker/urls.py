@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .views import ExpensesChartView
 
 
 urlpatterns = [
@@ -7,4 +8,6 @@ urlpatterns = [
     path('add_info', views.add_info, name='add_info'),
     path('add_income', views.add_income, name='add_income'),
     path('add_expenses', views.add_expenses, name='add_expenses'),
+    path('statistics', ExpensesChartView.as_view(), name='statistics'),
 ]
+

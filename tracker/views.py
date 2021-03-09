@@ -1,7 +1,9 @@
 import decimal
+
 from django.shortcuts import render, redirect
 from . import models
 from . import forms
+from django.views.generic import TemplateView
 
 
 def home(request):
@@ -20,15 +22,17 @@ def add_expenses(request):
     if request.method == "POST":
         form = forms.AddExpensesForm(request.POST)
         if form.is_valid():
-            amount = request.POST.get('amount')
+            amount_expenses = request.POST.get('amount_expenses')
             expenses_type = request.POST.get('expenses_type')
-            new_expense = models.Tracker(amount=amount,
+            date = request.POST.get('date')
+            new_expense = models.Tracker(amount_expenses=amount_expenses,
                                          expenses_type=expenses_type,
+                                         date=date,
                                          user=request.user)
             new_expense.save()
             for data in tracker:
-                data.balance -= decimal.Decimal(amount)
-                data.expenses += decimal.Decimal(amount)
+                data.balance -= decimal.Decimal(amount_expenses)
+                data.expenses += decimal.Decimal(amount_expenses)
                 data.save()
 
             return redirect('add_info')
@@ -46,8 +50,10 @@ def add_income(request):
         if form.is_valid():
             amount = request.POST.get('amount')
             income_type = request.POST.get('income_type')
+            date = request.POST.get('date')
             new_income = models.Tracker(amount=amount,
                                         income_type=income_type,
+                                        date=date,
                                         user=request.user)
             new_income.save()
             for data in tracker:
@@ -63,5 +69,10 @@ def add_income(request):
                       {'income_form': form})
 
 
-def login(request):
-    pass
+class ExpensesChartView(TemplateView):
+    template_name = 'charts/chart.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["qs"] = models.Tracker.objects.all()
+        return context

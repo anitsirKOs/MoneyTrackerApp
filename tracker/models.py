@@ -8,15 +8,19 @@ class Tracker(models.Model):
                                   max_digits=10, decimal_places=2)
     expenses = models.DecimalField(default=0, blank=True, null=True,
                                    max_digits=10, decimal_places=2)
-    income = models.DecimalField(default=0,
+    income = models.DecimalField(default=0, blank=True, null=True,
                                  max_digits=10, decimal_places=2)
     amount = models.DecimalField(default=0, blank=True, null=True,
                                  max_digits=10, decimal_places=2)
-
+    amount_expenses = models.DecimalField(default=0, blank=True, null=True,
+                                          max_digits=10, decimal_places=2)
     expenses_type = models.CharField(max_length=25, default='',
                                      choices=constants.EXPENSES_TYPE)
     income_type = models.CharField(max_length=25, default='',
                                    choices=constants.INCOME_TYPE)
+
+    date = models.DateField(null=True)
+    timestamp = models.DateField(auto_now_add=True)
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
