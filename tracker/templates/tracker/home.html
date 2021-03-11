@@ -26,7 +26,9 @@
         <h4>Recent expenses</h4>
         {% for item in data reversed %}
             <li>
-                {{ item.expenses_type }} {{ item.amount_expenses }} {{ item.timestamp }}
+                {{ item.expenses_type }}
+                {{ item.amount_expenses }}
+                {{ item.timestamp }}
             </li>
         {% endfor %}
         </ul>

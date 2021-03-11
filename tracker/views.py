@@ -1,10 +1,9 @@
 import decimal
 from django.contrib import messages
-
 from django.shortcuts import render, redirect
+from django.views.generic import TemplateView
 from . import models
 from . import forms
-from django.views.generic import TemplateView
 
 
 def home(request):

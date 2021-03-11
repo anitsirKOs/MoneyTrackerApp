@@ -1,4 +1,7 @@
-from django.forms import ModelForm, SelectDateWidget, DecimalField
+from django.forms import DecimalField
+from django.forms import ModelForm
+from django.forms import SelectDateWidget
+
 from .models import Tracker
 
 
