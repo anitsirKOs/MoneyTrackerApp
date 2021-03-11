@@ -4,15 +4,33 @@
 
 {% block content %}
     {% if all_tracking_data %}
-
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {{ message.tags }} m-2" id="msg" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        <br>
         <h3>Balance</h3>
-        <h1>{{ all_tracking_data.balance }}</h1>
+        <h1>{{ all_tracking_data.balance }}</h1><br><br>
 
         <h3>Income</h3>
-        <p>+{{ all_tracking_data.income }}</p>
+        <p>+{{ all_tracking_data.income }}</p><br><br>
 
         <h3>Expenses</h3>
-        <p>-{{ all_tracking_data.expenses }}</p>
+        <p>-{{ all_tracking_data.expenses }}</p><br>
+
+        <ul style="list-style-type: none; width: 500px;
+            border: 2px #808080 solid; padding: 3px; margin-bottom: 5px;">
+        <h4>Recent expenses</h4>
+        {% for item in data reversed %}
+            <li>
+                {{ item.expenses_type }} {{ item.amount_expenses }} {{ item.timestamp }}
+            </li>
+        {% endfor %}
+        </ul>
+
 
     {% else %}
         <p>Start your Money Tracker right now! Add information below!</p><br>

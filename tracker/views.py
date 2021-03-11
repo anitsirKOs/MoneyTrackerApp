@@ -1,4 +1,5 @@
 import decimal
+from django.contrib import messages
 
 from django.shortcuts import render, redirect
 from . import models
@@ -7,14 +8,24 @@ from django.views.generic import TemplateView
 
 
 def home(request):
+    data = models.Tracker.objects.all()
     all_tracking_data = models.Tracker.objects.filter(user=request.user).first()
+
+    storage = messages.get_messages(request)
+    if all_tracking_data:
+        if all_tracking_data.balance <= 0:
+            messages.warning(request, 'You are out of budget!')
+
     return render(request, 'tracker/home.html',
                   {'title': 'Money tracker',
-                   'all_tracking_data': all_tracking_data})
+                   'data': data,
+                   'all_tracking_data': all_tracking_data,
+                   'warning_message': storage})
 
 
 def add_info(request):
-    return render(request, 'tracker/add_info.html')
+    storage = messages.get_messages(request)
+    return render(request, 'tracker/add_info.html', {'messages': storage})
 
 
 def add_expenses(request):
@@ -30,6 +41,7 @@ def add_expenses(request):
                                          date=date,
                                          user=request.user)
             new_expense.save()
+            messages.success(request, 'Your expense was added!')
             for data in tracker:
                 data.balance -= decimal.Decimal(amount_expenses)
                 data.expenses += decimal.Decimal(amount_expenses)
@@ -48,17 +60,18 @@ def add_income(request):
     if request.method == "POST":
         form = forms.AddIncomeForm(request.POST)
         if form.is_valid():
-            amount = request.POST.get('amount')
+            amount_income = request.POST.get('amount_income')
             income_type = request.POST.get('income_type')
             date = request.POST.get('date')
-            new_income = models.Tracker(amount=amount,
+            new_income = models.Tracker(amount_income=amount_income,
                                         income_type=income_type,
                                         date=date,
                                         user=request.user)
             new_income.save()
+            messages.success(request, 'Your income was added!')
             for data in tracker:
-                data.balance += decimal.Decimal(amount)
-                data.income += decimal.Decimal(amount)
+                data.balance += decimal.Decimal(amount_income)
+                data.income += decimal.Decimal(amount_income)
                 data.save()
 
             return redirect('add_info')

@@ -3,6 +3,14 @@
 {% block title %}Add information{% endblock %}
 
 {% block content %}
+    {% if messages %}
+    {% for message in messages %}
+        <div class="alert {{ message.tags }} m-2" id="msg" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
     <a class="nav-link active" href="{% url 'add_income' %}">Add income</a>
     <br>
     <a class="nav-link active" href="{% url 'add_expenses' %}">Add expenses</a>

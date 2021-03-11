@@ -1,20 +1,30 @@
-from django.forms import ModelForm, SelectDateWidget
+from django.forms import ModelForm, SelectDateWidget, DecimalField
 from .models import Tracker
 
 
 class AddIncomeForm(ModelForm):
+    amount_income = DecimalField(min_value=0.01,
+                                 error_messages={
+                                     'min_value': u'Price cannot be less than 0.01'
+                                 })
+
     class Meta:
         model = Tracker
-        fields = ('amount', 'income_type', 'date')
+        fields = ('income_type', 'date')
         widgets = {
             'date': SelectDateWidget(),
         }
 
 
 class AddExpensesForm(ModelForm):
+    amount_expenses = DecimalField(min_value=0.01,
+                                   error_messages={
+                                       'min_value': u'Price cannot be less than 0.01'
+                                   })
+
     class Meta:
         model = Tracker
-        fields = ('amount_expenses', 'expenses_type', 'date')
+        fields = ('expenses_type', 'date')
         widgets = {
             'date': SelectDateWidget(),
         }
