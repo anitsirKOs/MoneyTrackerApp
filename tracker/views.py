@@ -2,6 +2,7 @@ import decimal
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
+
 from . import models
 from . import forms
 
@@ -46,7 +47,7 @@ def add_expenses(request):
                 data.expenses += decimal.Decimal(amount_expenses)
                 data.save()
 
-            return redirect('add_info')
+        return redirect('add_info')
     else:
         form = forms.AddExpensesForm()
         return render(request,
@@ -73,7 +74,7 @@ def add_income(request):
                 data.income += decimal.Decimal(amount_income)
                 data.save()
 
-            return redirect('add_info')
+        return redirect('add_info')
     else:
         form = forms.AddIncomeForm()
         return render(request,
