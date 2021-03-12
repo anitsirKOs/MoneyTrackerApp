@@ -1,0 +1,16 @@
+{% extends 'tracker/base.html' %}
+{% block title %}Login page{% endblock %}
+{% block content %}
+<h1>Login form</h1>
+    {% if form.errors %}
+       <p>Incorrect username or password. Try again</p>
+    {% else %}
+        <form method="post">
+            {{ form.as_p }}
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ next }}">
+            <input type="submit" value="Login">
+        </form>
+        <a href="{% url "password_reset" %}"> Forgot your password?</a>
+    {% endif %}
+{% endblock %}

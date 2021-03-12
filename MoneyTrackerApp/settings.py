@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 from django.contrib.messages import constants as messages
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -29,13 +30,13 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'tracker',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'tracker',
 ]
 
 MIDDLEWARE = [
@@ -121,3 +122,10 @@ MESSAGE_TAGS = {
     messages.WARNING: 'alert-warning',
     messages.ERROR: 'alert-danger',
 }
+
+LOGIN_URL = '/login/'
+LOGOUT_URL = '/logout/'
+
+LOGIN_REDIRECT_URL = '/'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
