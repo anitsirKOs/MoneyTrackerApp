@@ -14,4 +14,3 @@ class AddExpensesFormTest(TestCase):
     def test_add_min_expenses_field(self):
         form = AddExpensesForm()
         self.assertFalse(form.fields['amount_expenses'] == -2)
-
