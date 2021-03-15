@@ -1,15 +1,14 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from . import views
-from .views import ExpensesChartView
 
 
 urlpatterns = [
-    path('', views.home, name='home'),
+    path('', views.show_start_page, name='index'),
+    path('home/', views.home, name='home'),
     path('add_info/', views.add_info, name='add_info'),
     path('add_income/', views.add_income, name='add_income'),
     path('add_expenses/', views.add_expenses, name='add_expenses'),
-    path('statistics/', ExpensesChartView.as_view(), name='statistics'),
     path('login/', auth_views.LoginView.as_view(), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 
@@ -25,4 +24,7 @@ urlpatterns = [
 
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(),
          name='password_reset_complete'),
+    path('profile/', views.view_profile, name='profile'),
+    path('register/', views.register, name='register'),
+
 ]

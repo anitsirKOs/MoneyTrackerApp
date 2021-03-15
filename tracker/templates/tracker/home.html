@@ -1,6 +1,6 @@
 {% extends 'tracker/base.html' %}
 
-{% block title %}{{ title }}{% endblock %}
+{% block title %}Home page{% endblock %}
 
 {% block content %}
     {% if all_tracking_data %}
@@ -13,24 +13,28 @@
         {% endif %}
         <br>
         <h3>Balance</h3>
-        <h1>{{ all_tracking_data.balance }}</h1><br><br>
+        <h1>{{ all_tracking_data.balance }}</h1><br>
 
         <h3>Income</h3>
-        <p>+{{ all_tracking_data.income }}</p><br><br>
+        <p>+{{ all_tracking_data.income }}</p><br>
 
         <h3>Expenses</h3>
-        <p>-{{ all_tracking_data.expenses }}</p><br>
+        <p>-{{ all_tracking_data.expenses }}</p>
 
         <ul style="list-style-type: none; width: 500px;
             border: 2px #808080 solid; padding: 3px; margin-bottom: 5px;">
         <h4>Recent expenses</h4>
+        <div style="height:50px;overflow:auto;">
         {% for item in data reversed %}
-            <li>
-                {{ item.expenses_type }}
-                {{ item.amount_expenses }}
-                {{ item.timestamp }}
-            </li>
+            {% if item.amount_expenses %}
+                <li>
+                    {{ item.expenses_type }}
+                    {{ item.amount_expenses }}
+                    {{ item.timestamp }}
+                </li>
+            {% endif %}
         {% endfor %}
+        </div>
         </ul>
 
 

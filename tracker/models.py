@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -20,10 +21,18 @@ class Tracker(models.Model):
     income_type = models.CharField(max_length=25, default='',
                                    choices=constants.INCOME_TYPE)
 
-    date = models.DateField(null=True)
     timestamp = models.DateField(auto_now_add=True)
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.user)
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL,
+                                on_delete=models.CASCADE,
+                                primary_key=True)
 
     def __str__(self):
         return str(self.user)

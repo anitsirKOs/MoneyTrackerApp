@@ -10,3 +10,6 @@ INCOME_TYPE = [
     ('Savings', 'Savings'),
 ]
 
+REGISTER_EMAIL_SUBJECT = ('{}, This email confirms that you have registered '
+                          'successfully.')
+REGISTER_EMAIL_BODY = 'Now you can login.'

@@ -1,33 +1,42 @@
-from django.forms import DecimalField
-from django.forms import ModelForm
-from django.forms import SelectDateWidget
-
-from .models import Tracker
+from django.contrib.auth.models import User
+from django import forms
+from . import models
 
 
-class AddIncomeForm(ModelForm):
-    amount_income = DecimalField(min_value=0.01,
-                                 error_messages={
-                                     'min_value': u'Price cannot be less than 0.01'
-                                 })
+class AddIncomeForm(forms.ModelForm):
+    amount_income = forms.DecimalField(min_value=0.01,
+                                       error_messages={
+                                           'min_value': u'Price cannot be less than 0.01'
+                                       })
 
     class Meta:
-        model = Tracker
-        fields = ('income_type', 'date')
-        widgets = {
-            'date': SelectDateWidget(),
-        }
+        model = models.Tracker
+        fields = ('income_type',)
 
 
-class AddExpensesForm(ModelForm):
-    amount_expenses = DecimalField(min_value=0.01,
-                                   error_messages={
-                                       'min_value': u'Price cannot be less than 0.01'
-                                   })
+class AddExpensesForm(forms.ModelForm):
+    amount_expenses = forms.DecimalField(min_value=0.01,
+                                         error_messages={
+                                             'min_value': u'Price cannot be less than 0.01'
+                                         })
 
     class Meta:
-        model = Tracker
-        fields = ('expenses_type', 'date')
-        widgets = {
-            'date': SelectDateWidget(),
-        }
+        model = models.Tracker
+        fields = ('expenses_type',)
+
+
+class UserRegistrationForm(forms.ModelForm):
+    password = forms.CharField(label='Password',
+                               widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Password confirmation',
+                                widget=forms.PasswordInput)
+
+    class Meta:
+        model = User
+        fields = ('username', 'email')
+
+    def clean_password2(self):
+        cd = self.cleaned_data
+        if cd['password'] != cd['password2']:
+            raise forms.ValidationError('Passwords don\'t match')
+        return cd['password']

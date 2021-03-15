@@ -3,7 +3,15 @@
 
 {% block content %}
 
-    <h1>Hi {{ user }}</h1>
-    <p>You've been successfully registered. You can
-    <a href="{% url "login" %}">SIGN IN</a></p>
+    {% if messages %}
+    {% for message in messages %}
+        <div class="alert {{ message.tags }} m-2" id="msg" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+    <h1>Welcome {{ new_user }}</h1>
+    <a href="{% url "login" %}">Login</a>
+
 {% endblock %}

@@ -1,12 +1,18 @@
 import decimal
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
 from django.shortcuts import render, redirect
-from django.views.generic import TemplateView
-
+from . import constants
 from . import models
 from . import forms
 
 
+def show_start_page(request):
+    return render(request, 'registration/index.html')
+
+
+@login_required
 def home(request):
     data = models.Tracker.objects.all()
     all_tracking_data = models.Tracker.objects.filter(user=request.user).first()
@@ -23,11 +29,13 @@ def home(request):
                    'warning_message': storage})
 
 
+@login_required
 def add_info(request):
     storage = messages.get_messages(request)
     return render(request, 'tracker/add_info.html', {'messages': storage})
 
 
+@login_required
 def add_expenses(request):
     tracker = models.Tracker.objects.all()
     if request.method == "POST":
@@ -35,10 +43,8 @@ def add_expenses(request):
         if form.is_valid():
             amount_expenses = request.POST.get('amount_expenses')
             expenses_type = request.POST.get('expenses_type')
-            date = request.POST.get('date')
             new_expense = models.Tracker(amount_expenses=amount_expenses,
                                          expenses_type=expenses_type,
-                                         date=date,
                                          user=request.user)
             new_expense.save()
             messages.success(request, 'Your expense was added!')
@@ -55,6 +61,7 @@ def add_expenses(request):
                       {'expense_form': form})
 
 
+@login_required
 def add_income(request):
     tracker = models.Tracker.objects.all()
     if request.method == "POST":
@@ -62,10 +69,8 @@ def add_income(request):
         if form.is_valid():
             amount_income = request.POST.get('amount_income')
             income_type = request.POST.get('income_type')
-            date = request.POST.get('date')
             new_income = models.Tracker(amount_income=amount_income,
                                         income_type=income_type,
-                                        date=date,
                                         user=request.user)
             new_income.save()
             messages.success(request, 'Your income was added!')
@@ -82,10 +87,34 @@ def add_income(request):
                       {'income_form': form})
 
 
-class ExpensesChartView(TemplateView):
-    template_name = 'charts/chart.html'
+@login_required
+def view_profile(request):
+    return render(request, 'registration/profile.html', {'user': request.user})
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["qs"] = models.Tracker.objects.all()
-        return context
+
+def register(request):
+    if request.method == 'POST':
+        user_form = forms.UserRegistrationForm(request.POST)
+
+        if user_form.is_valid():
+            new_user = user_form.save(commit=False)
+            new_user.set_password(user_form.cleaned_data['password'])
+            new_user.save()
+            models.Profile.objects.create(user=new_user)
+
+            subject = constants.REGISTER_EMAIL_SUBJECT.format(
+                user_form.cleaned_data['username']
+            )
+            body = constants.REGISTER_EMAIL_BODY
+            to_email = request.POST.get('email')
+            send_mail(subject, body, 'me@me.by', [to_email, ])
+
+            messages.success(request, 'Registration completed successfully!'
+                                      ' Please check your email.')
+            return render(request,
+                          'registration/registration_done.html',
+                          {'new_user': new_user})
+    else:
+        user_form = forms.UserRegistrationForm()
+    return render(request, 'registration/register.html',
+                  {'user_form': user_form})
