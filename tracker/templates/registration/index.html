@@ -17,7 +17,19 @@
 <body class="h-100 text-center text-white bg-dark">
 <div class="cover-container d-flex w-100 h-20 p-3 mx-auto flex-column">
   <header class="mb-auto">
-    <div>
+  <div class="row">
+      <div class="col-sm-2" style="width: 100px;padding: 3px; margin-bottom: 5px;" >
+          <h3>Weather</h3><br>
+          <b>City: </b>{{ info.city }}<br>
+          <b>Temperature: </b>{{ info.temp }}<sup>0</sup><br>
+          <b>Humidity: </b>{{ info.humidity }}<br>
+          <b>Rain: </b>{{ info.rain }}<br>
+          <img src="http://openweathermap.org/img/w/{{ info.icon }}.png"
+               alt="Weather photo" class="img-thumbnail">
+
+      </div>
+
+    <div class="col-lg-10">
       <h3 class="float-md-start mb-0">My tracker</h3><br>
       <nav class="nav nav-masthead justify-content-center float-md-end">
 
@@ -32,10 +44,12 @@
           {% endif %}
       </nav>
     </div>
+</div>
   </header>
 </div>
 
     {% block content %}{% endblock %}
+
 
 </body>
 </html>

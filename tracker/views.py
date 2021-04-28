@@ -1,4 +1,5 @@
 import decimal
+import requests
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
@@ -9,7 +10,24 @@ from . import forms
 
 
 def show_start_page(request):
-    return render(request, 'registration/index.html')
+    app_key = '29f2bc1a88436bd61aab5ddde08873ee'
+    url = 'https://api.openweathermap.org/data/2.5/find?q=' \
+          '{}&units=metric&appid=' + app_key
+    city = 'Minsk'
+    response = requests.get(url.format(city)).json()
+    print(response)
+    city_info = {
+        'city': city,
+        'temp': response['list'][0]['main']['temp'],
+        'humidity': response['list'][0]['main']['humidity'],
+        'rain': response['list'][0]['rain'],
+        'icon': response['list'][0]['weather'][0]['icon'],
+    }
+
+    context = {
+        'info': city_info,
+    }
+    return render(request, 'registration/index.html', context)
 
 
 @login_required
